@@ -1,3 +1,3 @@
 require('./main.css');
 
-console.log('Application is loaded!');
+console.log('Awesome initialized');

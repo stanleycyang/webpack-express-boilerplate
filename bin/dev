@@ -4,22 +4,19 @@
 /* This is only for development, DO NOT USE for production */
 const babel = require('babel/register');
 
-var express = require('express');
-var path = require('path');
-var httpProxy = require('http-proxy');
-var http = require('http');
-var proxy = httpProxy.createProxyServer({
+const path = require('path');
+const httpProxy = require('http-proxy');
+const http = require('http');
+const proxy = httpProxy.createProxyServer({
   changeOrigin: true,
   ws: true
 });
-var app = express();
-var port = '3000';
-var publicPath = path.resolve(__dirname, '../public');
-
-app.use(express.static(publicPath));
+const app = require('../main');
+const port = '3000';
 
 
-var bundle = require('../dev-server/bundle.js');
+/* IMPORTANT: This code helps us build with react-hot-loader in dev while sustaining an express server */
+const bundle = require('../config/server/dev');
 bundle();
 app.all('/build/*', function (req, res) {
   proxy.web(req, res, {
@@ -39,7 +36,7 @@ proxy.on('error', function(e) {
 
 // We need to use basic HTTP service to proxy
 // websocket requests from webpack
-var server = http.createServer(app);
+const server = http.createServer(app);
 
 server.on('upgrade', function (req, socket, head) {
   proxy.ws(req, socket, head);

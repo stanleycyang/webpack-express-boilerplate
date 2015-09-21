@@ -1,0 +1,33 @@
+#! /usr/bin/env node
+'use strict';
+
+/* This is for Production. Do not use this for development */
+
+require('dotenv').load();
+const babel = require('babel/register');
+const setup = require('../config/server/setup');
+const http = require('http');
+const websockets = require('socket.io');
+const app = require('../main');
+
+const PORT = setup.normalizePort(process.env.PORT);
+app.set('port', PORT);
+
+// Start up the Express server
+const server = http.createServer(app);
+// Websockets
+const io = websockets(server);
+
+io.sockets.on('connection', (socket) => {
+  console.log('User connected');
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
+
+server.listen(PORT, () => {
+  console.log('Listening on port %s', PORT);
+});
+server.on('error', setup.onError);
+

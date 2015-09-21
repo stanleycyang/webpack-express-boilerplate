@@ -7,6 +7,9 @@ import favicon from 'serve-favicon';
 
 const app = express();
 
+// Bring in the database
+import database from './db/config';
+
 // Uncomment after adding favicon into /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));

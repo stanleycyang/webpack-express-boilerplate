@@ -11,8 +11,11 @@ const proxy = httpProxy.createProxyServer({
   changeOrigin: true,
   ws: true
 });
+const setup = require('../config/server/setup');
 const app = require('../main');
-const port = '3000';
+const PORT = setup.normalizePort('3000');
+// Set the port as an app variable
+app.set('port', PORT);
 
 
 /* IMPORTANT: This code helps us build with react-hot-loader in dev while sustaining an express server */
@@ -42,6 +45,8 @@ server.on('upgrade', function (req, socket, head) {
   proxy.ws(req, socket, head);
 });
 
-server.listen(port, function () {
-  console.log('Server running on port ' + port);
+server.listen(PORT, function () {
+  console.log('Server running on port %s', PORT);
 });
+
+server.on('error', setup.onError);

@@ -23,6 +23,7 @@ export function normalizePort(val) {
  */
 
 export function onError(error) {
+  const port = app.get('port');
   if (error.syscall !== 'listen') {
     throw error;
   }
